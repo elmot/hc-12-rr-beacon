@@ -11,13 +11,21 @@ set(CMAKE_CXX_COMPILER iccstm8.exe)
 
 project(hc-12-test C ASM)
 add_executable(hc-12-test)
-target_sources(hc-12-test PUBLIC main.c stm8s_it.c)
+
+target_sources(hc-12-test PUBLIC hc12hw.c stm8s_it.c )
 target_sources(hc-12-test PUBLIC stm8s_it.h stm8s_conf.h)
 
 target_sources(hc-12-test PUBLIC STM8S_StdPeriph_Driver/src/stm8s_spi.c STM8S_StdPeriph_Driver/src/stm8s_gpio.c)
 
+set(EXAMPLE_SRC Si446x_UnmodulatedCarrier/src)
+target_sources(hc-12-test PUBLIC
+        ${EXAMPLE_SRC}/application/main.c
+        ${EXAMPLE_SRC}/application/radio.c
+        ${EXAMPLE_SRC}/drivers/radio/radio_comm.c
+        ${EXAMPLE_SRC}/drivers/radio/Si446x/si446x_api_lib.c
+        )
 
-target_compile_definitions(hc-12-test PUBLIC STM8S003 USE_STDPERIPH_DRIVER)
+target_compile_definitions(hc-12-test PUBLIC STM8S003 USE_STDPERIPH_DRIVER SILABS_RADIO_SI446X)
 target_include_directories(hc-12-test PUBLIC STM8S_StdPeriph_Driver/inc .)
 
 target_compile_options(hc-12-test PUBLIC -e -Ol --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)

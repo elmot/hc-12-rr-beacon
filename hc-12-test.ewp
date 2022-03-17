@@ -189,6 +189,8 @@
                 <option>
                     <name>CCDefines</name>
                     <state>STM8S003</state>
+                    <state>SILABS_RADIO_SI446X</state>
+                    <state>USE_STDPERIPH_DRIVER</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -257,7 +259,7 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>D:\projects\hc-12-test\STM8S_StdPeriph_Driver\inc</state>
-                    <state>D:\projects\hc-12-test</state>
+                    <state>D:\projects\hc-12-test\src</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -607,7 +609,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\lnkstm8s003k3.icf</state>
+                    <state>$TOOLKIT_DIR$\config\lnkstm8s003f3.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1637,6 +1639,21 @@
         </settings>
     </configuration>
     <group>
+        <name>Src</name>
+        <file>
+            <name>$PROJ_DIR$\src\elmot-si-4463.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\radio_hal.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\stm8s_it.c</name>
+        </file>
+    </group>
+    <group>
         <name>StdLib</name>
         <group>
             <name>Inc</name>
@@ -1722,6 +1739,9 @@
         <group>
             <name>Src</name>
             <file>
+                <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_clk.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_gpio.c</name>
             </file>
             <file>
@@ -1735,7 +1755,4 @@
             </file>
         </group>
     </group>
-    <file>
-        <name>$PROJ_DIR$\main.c</name>
-    </file>
 </project>

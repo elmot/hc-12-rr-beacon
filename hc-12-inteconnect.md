@@ -7,6 +7,7 @@ PC5     | SCLK       | SPI SCK
 PC6     | SDI        | SPI MOSI
 PC7     | SDO        | SPI MISO
 PD2     | nSEL       | SPI nCE
+PD4     | SDN        | Shutdown
 PD5     | ----       | UART TX
 PD6     | ----       | UART RX
 ----    | GPIO2      | Antenna switch(*?? todo*) 
