@@ -6,23 +6,24 @@ bool radio_hal_NirqLevel(void) {
 }
 
 void radio_hal_ClearNsel(void) {
+//    SPI->CR1 |= 0x40; /* Enable the SPI peripheral*/
     GPIO_WriteLow(GPIOD, GPIO_PIN_2);
-    SPI->CR1 |= 0x40; /* Enable the SPI peripheral*/
 }
 
 void radio_hal_SetNsel(void) {
-    while ((SPI->SR & 0x82) != 0x2) nop();//ccSpiWait for TXE high and BSY low
-    SPI->CR1 &= ~0x40; /* Disable the SPI peripheral*/
+  
+    while ((SPI->SR & (SPI_SR_BSY | SPI_SR_TXE | SPI_SR_RXNE)) != SPI_SR_TXE ) nop();//ccSpiWait for TXE high and BSY low
     GPIO_WriteHigh(GPIOD, GPIO_PIN_2);
+//    SPI->CR1 &= ~0x40; /* Disable the SPI peripheral*/
 }
 
 static inline void spiWaitRxne(void) {
- while (!(SPI->SR & 0x01));//ccSpiWait for RXNE
+ while (!(SPI->SR & SPI_SR_RXNE));//ccSpiWait for RXNE
 }
 
 
 static inline U8 spiReadWrite(U8 byteToWrite) {
-    while ((SPI->SR & 0x82) != 0x2) nop();
+    while ((SPI->SR & SPI_SR_TXE) != SPI_SR_TXE) nop();
     SPI->DR = byteToWrite;
     spiWaitRxne();
     return SPI->DR;

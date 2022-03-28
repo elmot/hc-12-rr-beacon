@@ -124,9 +124,9 @@ void radio_comm_SendCmd(uint8_t byteCount, uint8_t* pData)
 
 uint8_t radio_comm_SendCmdGetResp(uint8_t cmdByteCount, uint8_t * pCmdData, uint8_t  respByteCount, uint8_t * pRespData)
 {
-    delay(10);//todo remove
+    delay(5);//todo remove
     radio_comm_SendCmd(cmdByteCount, pCmdData);
-    delay(10);//todo remove
+    delay(5);//todo remove
     return radio_comm_GetResp(respByteCount, pRespData);
 }
 /*!
@@ -297,6 +297,7 @@ void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket) {
     si446x_write_tx_fifo(RADIO_CONFIGURATION_DATA_RADIO_PACKET_LENGTH, pioFixRadioPacket);
 
     /* Start sending packet, channel 0, START immediately, Packet length according to PH, go READY when done */
+    delay(10);//todo adjust
     si446x_start_tx(channel, 0x30,  0x00);
 }
 
@@ -313,10 +314,11 @@ void vRadio_PowerUp(void)
 
     /* Put radio in shutdown, wait then release */
     radio_hal_AssertShutdown();
+    delay(400);//todo optimize
     radio_hal_DeassertShutdown();
     ctsWentHigh = 0;
     /* Wait until reset timeout or Reset IT signal */
-    delay(200);//todo optimize
+    delay(1400);//todo optimize
 }
 
 void vRadio_Init(){
