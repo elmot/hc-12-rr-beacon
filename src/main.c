@@ -14,15 +14,15 @@ void   inithW() {
     GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT); //nIRQ
     GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_IN_PU_NO_IT);//SPI MISO
 
-    GPIO_Init(GPIOC, GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUT_PP_HIGH_FAST); //SPI_SCK, SPI_MOSI
+    GPIO_Init(GPIOC, GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST); //SPI_SCK, SPI_MOSI
 //    GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_IN_PU_NO_IT); //SPI_MISO
 
-    SPI_DeInit();
-    SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_256, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
-             SPI_CLOCKPHASE_1EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, (uint8_t) 0x07);
+//    SPI_DeInit();
+//    SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_256, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
+//             SPI_CLOCKPHASE_1EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, (uint8_t) 0x07);
 
 //    SPI_Cmd(DISABLE); todo check
-    SPI_Cmd(ENABLE);
+    //SPI_Cmd(ENABLE);
 }
 /*
 Error[Li005]: no definition for "assert_failed" [referenced from D:\projects\hc-12-test2\Debug\Obj\stm8s_spi.o] 
@@ -42,10 +42,10 @@ int main( void )
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
       while(1){     
-        vRadio_StartTx(34, (unsigned char *)PATTERN);
-        delay(200);//todo adjust
-        vRadio_StartTx(34, (unsigned char *)PATTERN);
-        delay(200);//todo adjust
+        vRadio_StartTx(35, (unsigned char *)PATTERN);
+        delay(400);//todo adjust
+        vRadio_StartTx(35, (unsigned char *)PATTERN);
+        delay(400);//todo adjust
 }
   return 0;
 }

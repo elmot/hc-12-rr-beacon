@@ -1750,9 +1750,6 @@
             <file>
                 <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_rst.c</name>
             </file>
-            <file>
-                <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_spi.c</name>
-            </file>
         </group>
     </group>
 </project>
