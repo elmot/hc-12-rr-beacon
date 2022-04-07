@@ -5,8 +5,10 @@
 void vRadio_Init(void);
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
 
-void   inithW() {
-   CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+void initHW() {
+    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV4);
+    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);
+
     GPIO_DeInit(GPIOD);
     GPIO_DeInit(GPIOC);
     GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_OUT_PP_HIGH_FAST); //SPI Soft CS
@@ -30,7 +32,7 @@ Error[Li005]: no definition for "assert_failed" [referenced from D:\projects\hc-
 void delay(uint16_t msec);
 int main( void )
 {
-  inithW();
+  initHW();
         vRadio_Init();
       const unsigned char *PATTERN = (U8 *)
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
@@ -43,9 +45,9 @@ int main( void )
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
       while(1){     
         vRadio_StartTx(35, (unsigned char *)PATTERN);
-        delay(400);//todo adjust
+        delay(64000);//todo adjust
         vRadio_StartTx(35, (unsigned char *)PATTERN);
-        delay(400);//todo adjust
+        delay(64000);//todo adjust
 }
   return 0;
 }

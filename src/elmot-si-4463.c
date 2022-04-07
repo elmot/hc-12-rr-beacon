@@ -124,9 +124,7 @@ void radio_comm_SendCmd(uint8_t byteCount, uint8_t* pData)
 
 uint8_t radio_comm_SendCmdGetResp(uint8_t cmdByteCount, uint8_t * pCmdData, uint8_t  respByteCount, uint8_t * pRespData)
 {
-    delay(5);//todo remove
     radio_comm_SendCmd(cmdByteCount, pCmdData);
-    delay(5);//todo remove
     return radio_comm_GetResp(respByteCount, pRespData);
 }
 /*!
@@ -285,19 +283,15 @@ void si446x_get_int_status(uint8_t PH_CLR_PEND, uint8_t MODEM_CLR_PEND, uint8_t 
 
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket) {
     /* Reset TX FIFO */
-    delay(10);//todo adjust
     si446x_fifo_info(SI446X_CMD_FIFO_INFO_ARG_FIFO_TX_BIT);
 
     // Read ITs, clear pending ones
-    delay(10);//todo adjust
     si446x_get_int_status(0u, 0u, 0u);
 
     /* Fill the TX fifo with datas */
-    delay(10);//todo adjust
     si446x_write_tx_fifo(RADIO_CONFIGURATION_DATA_RADIO_PACKET_LENGTH, pioFixRadioPacket);
 
     /* Start sending packet, channel 0, START immediately, Packet length according to PH, go READY when done */
-    delay(10);//todo adjust
     si446x_start_tx(channel, 0x30,  0x00);
 }
 

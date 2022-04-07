@@ -13,6 +13,10 @@
 #define SDN_GPIO_Port GPIOD
 #define SDN_Pin GPIO_PIN_4
 
+void static inline shortDelay() {
+        asm ("nop");
+}
+
 bool radio_hal_NirqLevel(void) {
     return (bool)GPIO_ReadInputPin(GPIOC, GPIO_PIN_4);
 }
@@ -29,25 +33,6 @@ void radio_hal_SetNsel(void) {
 //    SPI->CR1 &= ~0x40; /* Disable the SPI peripheral*/
 }
 
-void shortDelay() {
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-        asm ("nop");
-}
 
 void radio_hal_SpiWriteData(uint8_t byteCount, const uint8_t *pData) {
     shortDelay();
@@ -86,7 +71,7 @@ void radio_hal_SpiReadData(uint8_t byteCount, uint8_t *pData) {
 }
 
 void delay(uint16_t msec) {
-   for(int i = 0; i < msec*1000; i++)
+   for(long i = 0; i < msec*10000; i++)
    {
      shortDelay();
    }
@@ -94,10 +79,8 @@ void delay(uint16_t msec) {
 
 void radio_hal_AssertShutdown(void) {
     GPIO_WriteHigh(SDN_GPIO_Port, SDN_Pin);
-    delay(100);// todo adjust
 }
 
 void radio_hal_DeassertShutdown(void) {
     GPIO_WriteLow(SDN_GPIO_Port, SDN_Pin);
-    delay(100);// todo adjust
 }
