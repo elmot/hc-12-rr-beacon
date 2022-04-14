@@ -5,9 +5,10 @@
 void vRadio_Init(void);
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
 
+
 void initHW() {
-    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
-    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);
+//    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
+//    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);
 
     GPIO_DeInit(GPIOD);
     GPIO_DeInit(GPIOC);
@@ -22,14 +23,16 @@ void initHW() {
              SPI_CLOCKPHASE_1EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, (uint8_t) 0x07);
 
     SPI_Cmd(ENABLE);
+
+
 }
-/*
-Error[Li005]: no definition for "assert_failed" [referenced from D:\projects\hc-12-test2\Debug\Obj\stm8s_spi.o] 
-*/
+
 void delay(uint16_t msec);
+
 int main( void )
 {
   initHW();
+//  TODO begin of timer test
         vRadio_Init();
       const unsigned char *PATTERN = (U8 *)
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
