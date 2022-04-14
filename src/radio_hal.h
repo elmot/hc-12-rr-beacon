@@ -15,6 +15,9 @@ void radio_hal_SetNsel(void);
 void radio_hal_AssertShutdown(void);
 void radio_hal_DeassertShutdown(void);
 
+void radio_hal_SpiWriteByte(uint8_t);
+uint8_t radio_hal_SpiReadByte(void);
+
 void radio_hal_SpiWriteData(uint8_t byteCount,const uint8_t *pData);
 void radio_hal_SpiReadData(uint8_t byteCount, uint8_t *pData);
 

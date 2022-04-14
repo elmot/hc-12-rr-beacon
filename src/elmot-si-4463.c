@@ -24,16 +24,6 @@ const uint8_t Radio_Configuration_Data_Array[] =
 
 void si446x_get_int_status(uint8_t PH_CLR_PEND, uint8_t MODEM_CLR_PEND, uint8_t CHIP_CLR_PEND);
 
-void radio_hal_SpiWriteByte(uint8_t byteToWrite) {
-    radio_hal_SpiWriteData(1, &byteToWrite);
-}
-
-uint8_t radio_hal_SpiReadByte(void) {
-    uint8_t b;
-    radio_hal_SpiReadData(1, &b);
-    return b;
-}
-
 /*!
  * Gets a command response from the radio chip
  *

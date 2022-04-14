@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="hc-12-test" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-Device=STM8S003F3 -verbose -ProgMode=SWIM -no_progress -version -no_loop -FileProg=$CMakeCurrentLocalGenerationDir$\$ProjectName$.hex " REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="hc-12-test" TARGET_NAME="hc-12-test" CONFIG_NAME="Debug-MinGW IAR STM8" RUN_PATH="C:/Program Files (x86)/STMicroelectronics/st_toolset/stvp/STVP_CmdLine.exe">
+  <configuration default="false" name="hc-12-test" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-Device=STM8S003F3 -verbose -ProgMode=SWIM -no_progress -version -no_loop -FileProg=$CMakeCurrentLocalGenerationDir$\$ProjectName$.hex" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="hc-12-test" TARGET_NAME="hc-12-test" CONFIG_NAME="Debug-MinGW IAR STM8" RUN_PATH="C:/Program Files (x86)/STMicroelectronics/st_toolset/stvp/STVP_CmdLine.exe">
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
     </method>

@@ -15,6 +15,8 @@ void initHW() {
     GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
     GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT); //nIRQ
 
+    GPIO_Init(GPIOC, GPIO_PIN_6 | GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
+
     SPI_DeInit();
     SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_2, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
              SPI_CLOCKPHASE_1EDGE, SPI_DATADIRECTION_2LINES_FULLDUPLEX, SPI_NSS_SOFT, (uint8_t) 0x07);
@@ -39,9 +41,9 @@ int main( void )
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
           "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
       while(1){     
-        vRadio_StartTx(35, (unsigned char *)PATTERN);
+        vRadio_StartTx(0, (unsigned char *)PATTERN);
         delay(64000);//todo adjust
-        vRadio_StartTx(35, (unsigned char *)PATTERN);
+        vRadio_StartTx(0, (unsigned char *)PATTERN);
         delay(64000);//todo adjust
 }
   return 0;

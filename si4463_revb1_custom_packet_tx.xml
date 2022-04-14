@@ -4,13 +4,13 @@
     <tbpFrequencyAndPower Type="System.Windows.Forms.TabPage">
       <grbFequencyControl Type="System.Windows.Forms.GroupBox">
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudChannelNumber">
-          <Value>35</Value>
+          <Value>0</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCenterFrequency">
-          <Value>433.05</Value>
+          <Value>433.88500</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudChannelSpacing">
-          <Value>25</Value>
+          <Value>25.00</Value>
         </DataItem>
       </grbFequencyControl>
       <grbCrystalControl Type="System.Windows.Forms.GroupBox">
@@ -27,7 +27,7 @@
           <Value>30</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCrystalCapBank">
-          <Value>82</Value>
+          <Value>64</Value>
         </DataItem>
       </grbCrystalControl>
       <DataItem Type="System.Windows.Forms.CheckBox" Name="chbDividedSystemClock">
@@ -62,7 +62,7 @@
           <Value>3</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudDeviation">
-          <Value>5</Value>
+          <Value>3.5</Value>
         </DataItem>
       </grbRfParameters>
     </tbpRfParameters>
@@ -109,7 +109,7 @@
           </tbpGeneralCrcConfig>
           <tbpGeneralDataWhiteningConfiguration Type="System.Windows.Forms.TabPage">
             <DataItem Type="System.Windows.Forms.ComboBox" Name="cbbDataWhiteningPolynomial">
-              <SelectedIndex>1</SelectedIndex>
+              <SelectedIndex>0</SelectedIndex>
             </DataItem>
             <DataItem Type="System.Windows.Forms.MaskedTextBox" Name="mtbDataWhiteningSeed">
               <Text>FF FF</Text>
@@ -159,6 +159,9 @@
               </DataItem>
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbPreambleManchesterEncoded">
                 <Checked>False</Checked>
+              </DataItem>
+              <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudPreambleRXThreshold">
+                <Value>20</Value>
               </DataItem>
             </grbPreamble>
           </tbpPreamble>

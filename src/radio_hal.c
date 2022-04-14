@@ -28,31 +28,156 @@ void radio_hal_ClearNsel(void) {
 
 void radio_hal_SetNsel(void) {
 
-//    while ((SPI->SR & (SPI_SR_BSY | SPI_SR_TXE | SPI_SR_RXNE)) != SPI_SR_TXE ) nop();//ccSpiWait for TXE high and BSY low
+    while(SPI_GetFlagStatus(SPI_FLAG_BSY) == SET) {}
     GPIO_WriteHigh(GPIOD, GPIO_PIN_2);
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
+    shortDelay();
 //    SPI->CR1 &= ~0x40; /* Disable the SPI peripheral*/
 }
 
+static inline uint8_t SpiSendReceive(uint8_t data) {
+    while ((SPI->SR & (uint8_t)SPI_FLAG_TXE) == 0) {}
+    SPI->DR = data;
+
+    while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET) {}
+    SPI_ReceiveData();
+}
 
 void radio_hal_SpiWriteData(uint8_t byteCount, const uint8_t *pData) {
     for (int i = 0; i < byteCount; i++) {
-        while (SPI_GetFlagStatus(SPI_FLAG_TXE) == RESET) {}
-        SPI_SendData(SPI->DR = pData[i]);
-
-        while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET) {}
-        SPI_ReceiveData();
+        SpiSendReceive(pData[i]);
     }
 }
 
 void radio_hal_SpiReadData(uint8_t byteCount, uint8_t *pData) {
     for (int i = 0; i < byteCount; i++) {
-        while (SPI_GetFlagStatus(SPI_FLAG_TXE) == RESET) {}
-        SPI_SendData(0xFF);
-
-        while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET) {}
-        pData[i] = SPI_ReceiveData();
+        pData[i] = SpiSendReceive(0xFF);
     }
 }
+
+void radio_hal_SpiWriteByte(uint8_t byteToWrite) {
+    SpiSendReceive(byteToWrite);
+}
+
+uint8_t radio_hal_SpiReadByte(void) {
+    return SpiSendReceive(0xFF);
+}
+
 
 void delay(uint16_t msec) {
     for (long i = 0; i < msec * 10000; i++) {
