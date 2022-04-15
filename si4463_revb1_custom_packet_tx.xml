@@ -160,9 +160,6 @@
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbPreambleManchesterEncoded">
                 <Checked>False</Checked>
               </DataItem>
-              <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudPreambleRXThreshold">
-                <Value>20</Value>
-              </DataItem>
             </grbPreamble>
           </tbpPreamble>
           <tbpSyncWord Type="System.Windows.Forms.TabPage">
@@ -405,16 +402,16 @@
           <SelectedIndex>DONOTHING</SelectedIndex>
         </DataItem>
         <DataItem Type="System.Windows.Forms.CheckBox" Name="chbGpio2Pullup">
-          <Checked>True</Checked>
+          <Checked>False</Checked>
         </DataItem>
         <DataItem Type="System.Windows.Forms.ComboBox" Name="cbbGpio2">
           <SelectedIndex>TX_STATE</SelectedIndex>
         </DataItem>
         <DataItem Type="System.Windows.Forms.CheckBox" Name="chbGpio3Pullup">
-          <Checked>True</Checked>
+          <Checked>False</Checked>
         </DataItem>
         <DataItem Type="System.Windows.Forms.ComboBox" Name="cbbGpio3">
-          <SelectedIndex>RX_STATE</SelectedIndex>
+          <SelectedIndex>DRIVE0</SelectedIndex>
         </DataItem>
         <DataItem Type="System.Windows.Forms.CheckBox" Name="chbNirqPullup">
           <Checked>False</Checked>

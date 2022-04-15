@@ -100,7 +100,7 @@ uint8_t radio_comm_PollCTS(void)
  * @param byteCount     Number of bytes in the command to send to the radio device
  * @param pData         Pointer to the command to send.
  */
-void radio_comm_SendCmd(uint8_t byteCount, uint8_t* pData)
+void radio_comm_SendCmd(uint8_t byteCount,const uint8_t* pData)
 {
     while (!ctsWentHigh)
     {
@@ -293,8 +293,6 @@ void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket) {
  */
 void vRadio_PowerUp(void)
 {
-    /* Hardware reset the chip */
-    uint8_t loopCount;
 
     /* Put radio in shutdown, wait then release */
     radio_hal_AssertShutdown();

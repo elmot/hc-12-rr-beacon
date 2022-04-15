@@ -5,7 +5,6 @@
 void vRadio_Init(void);
 
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
-//todo packet sequence
 //todo packet format
 //todo IWDG setup
 //todo led blink
@@ -25,7 +24,7 @@ void initHW() {
     GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
     GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT); //nIRQ
 
-    GPIO_Init(GPIOC, GPIO_PIN_6 | GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
+    GPIO_Init(GPIOC, (GPIO_Pin_TypeDef)(GPIO_PIN_6 | GPIO_PIN_5), GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
 
     SPI_DeInit();
     SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_2, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
@@ -41,22 +40,44 @@ void initHW() {
 
 void delay(uint16_t msec);
 
+void radio_comm_SendCmd(uint8_t byteCount, uint8_t const *pData);
+
+#define RF_TX_POWER_LEN 8
+#define RF_TX_POWER(x) 0x11, 0x22, 0x04, 0x00, 0x08, x, 0x00, 0x5D
+
+const uint8_t POWER_STEP_0[] = {RF_TX_POWER(127)};
+const uint8_t POWER_STEP_1[] = {RF_TX_POWER(50)};
+const uint8_t POWER_STEP_2[] = {RF_TX_POWER(20)};
+const uint8_t POWER_STEP_3[] = {RF_TX_POWER(8)};
+const uint8_t POWER_STEP_4[] = {RF_TX_POWER(0x0)};
+
+const unsigned char *PATTERN = (U8 *)
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
+
 int main(void) {
     initHW();
-//  TODO begin of timer test
     vRadio_Init();
-    const unsigned char *PATTERN = (U8 *)
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
     while (1) {
+        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_0);//todo remove when IWDG works
         vRadio_StartTx(0, (unsigned char *) PATTERN);
-        delay(1800);//todo adjust
+        delay(50);
+        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_1);
+        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        delay(50);
+        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_2);
+        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        delay(50);
+        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_3);
+        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        delay(50);
+        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_4);
         vRadio_StartTx(0, (unsigned char *) PATTERN);
         delay(1800);//todo adjust
     }
