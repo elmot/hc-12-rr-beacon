@@ -298,11 +298,11 @@ void vRadio_PowerUp(void)
 
     /* Put radio in shutdown, wait then release */
     radio_hal_AssertShutdown();
-    delay(400);//todo optimize
+    delay(150);//todo optimize
     radio_hal_DeassertShutdown();
     ctsWentHigh = 0;
     /* Wait until reset timeout or Reset IT signal */
-    delay(1400);//todo optimize
+    delay(150);//todo optimize
 }
 
 void vRadio_Init(){

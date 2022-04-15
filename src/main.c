@@ -3,12 +3,21 @@
 #define U8 uint8_t
 
 void vRadio_Init(void);
+
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
+//todo packet sequence
+//todo packet format
+//todo IWDG setup
+//todo led blink
+//todo sequence
+//todo power save
+//todo hw cts
+
 
 
 void initHW() {
-//    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
-//    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);
+    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV8);
+    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
 
     GPIO_DeInit(GPIOD);
     GPIO_DeInit(GPIOC);
@@ -24,33 +33,36 @@ void initHW() {
 
     SPI_Cmd(ENABLE);
 
-
+    TIM2_DeInit();
+    TIM2_ARRPreloadConfig(DISABLE);
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16384, 1500);
+    TIM2_ITConfig(TIM2_IT_UPDATE, ENABLE);
 }
 
 void delay(uint16_t msec);
 
-int main( void )
-{
-  initHW();
+int main(void) {
+    initHW();
 //  TODO begin of timer test
-        vRadio_Init();
-      const unsigned char *PATTERN = (U8 *)
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-          "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
-      while(1){     
-        vRadio_StartTx(0, (unsigned char *)PATTERN);
-        delay(64000);//todo adjust
-        vRadio_StartTx(0, (unsigned char *)PATTERN);
-        delay(64000);//todo adjust
+    vRadio_Init();
+    const unsigned char *PATTERN = (U8 *)
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
+        "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
+    while (1) {
+        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        delay(1800);//todo adjust
+        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        delay(1800);//todo adjust
+    }
+    return 0;
 }
-  return 0;
-}
+
 #ifdef USE_FULL_ASSERT
 
 /**

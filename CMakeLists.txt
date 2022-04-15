@@ -15,11 +15,13 @@ add_executable(hc-12-test)
 target_sources(hc-12-test PUBLIC src/main.c src/elmot-si-4463.c src/radio_hal.c src/stm8s_it.c )
 target_sources(hc-12-test PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config.h src/radio_hal.h)
 
-target_sources(hc-12-test PUBLIC STM8S_StdPeriph_Driver/src/stm8s_spi.c
+target_sources(hc-12-test PUBLIC
+        STM8S_StdPeriph_Driver/src/stm8s_spi.c
         STM8S_StdPeriph_Driver/src/stm8s_gpio.c
         STM8S_StdPeriph_Driver/src/stm8s_clk.c
         STM8S_StdPeriph_Driver/src/stm8s_itc.c
         STM8S_StdPeriph_Driver/src/stm8s_rst.c
+        STM8S_StdPeriph_Driver/src/stm8s_tim2.c
         )
 
 target_compile_definitions(hc-12-test PUBLIC STM8S003 USE_STDPERIPH_DRIVER SILABS_RADIO_SI446X)

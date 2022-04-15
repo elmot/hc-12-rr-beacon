@@ -1,59 +1,26 @@
 #include "stm8s.h"
 #include "radio_hal.h"
 
-//#define MOSI_GPIO_Port GPIOC
-//#define MOSI_Pin GPIO_PIN_6
-//
-//#define MISO_GPIO_Port GPIOC
-//#define MISO_Pin GPIO_PIN_7
-//
-//#define SCK_GPIO_Port GPIOC
-//#define SCK_Pin GPIO_PIN_5
-
 #define SDN_GPIO_Port GPIOD
 #define SDN_Pin GPIO_PIN_4
-
-void static inline shortDelay() {
-    asm ("nop");
-}
 
 bool radio_hal_NirqLevel(void) {
     return (bool) GPIO_ReadInputPin(GPIOC, GPIO_PIN_4);
 }
 
 void radio_hal_ClearNsel(void) {
-//    SPI->CR1 |= 0x40; /* Enable the SPI peripheral*/
     GPIO_WriteLow(GPIOD, GPIO_PIN_2);
 }
 
 void radio_hal_SetNsel(void) {
 
-    while(SPI_GetFlagStatus(SPI_FLAG_BSY) == SET) {}
+    while (SPI_GetFlagStatus(SPI_FLAG_BSY) == SET) {}
     GPIO_WriteHigh(GPIOD, GPIO_PIN_2);
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
-    shortDelay();
+    delay(8);
 }
 
 static inline uint8_t SpiSendReceive(uint8_t data) {
-    while ((SPI->SR & (uint8_t)SPI_FLAG_TXE) == 0) {}
+    while ((SPI->SR & (uint8_t) SPI_FLAG_TXE) == 0) {}
     SPI->DR = data;
 
     while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET) {}
@@ -82,9 +49,13 @@ uint8_t radio_hal_SpiReadByte(void) {
 
 
 void delay(uint16_t msec) {
-    for (long i = 0; i < msec * 10000; i++) {
-        shortDelay();
-    }
+    TIM2_SetCounter(0);
+    TIM2_SetAutoreload(msec);
+    TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE);
+    TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
+    enableInterrupts();
+    TIM2_Cmd(ENABLE);
+    __wait_for_interrupt();
 }
 
 void radio_hal_AssertShutdown(void) {
