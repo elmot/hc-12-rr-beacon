@@ -1,24 +1,13 @@
 #include "stm8s.h"
+#include "main.h"
 
 #define U8 uint8_t
 
-void delay(uint16_t msec);
-
-void radio_comm_SendCmd(uint8_t byteCount, uint8_t const *pData);
-
-void vRadio_Init(void);
-
-void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
-//todo packet format
 //todo IWDG setup
 //todo led blink
-//todo sequence
 //todo power save
-//todo hw cts
 
-
-
-void initHW() {
+static inline void initHW() {
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV8);
     CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
 
@@ -43,43 +32,54 @@ void initHW() {
 }
 
 #define RF_TX_POWER_LEN 8
-#define RF_TX_POWER(x) 0x11, 0x22, 0x04, 0x00, 0x08, x, 0x00, 0x5D
 
-const uint8_t POWER_STEP_0[] = {RF_TX_POWER(127)};
-const uint8_t POWER_STEP_1[] = {RF_TX_POWER(50)};
-const uint8_t POWER_STEP_2[] = {RF_TX_POWER(20)};
-const uint8_t POWER_STEP_3[] = {RF_TX_POWER(8)};
-const uint8_t POWER_STEP_4[] = {RF_TX_POWER(0x0)};
+static uint8_t power_command[RF_TX_POWER_LEN]  = {0x11, 0x22, 0x04, 0x00, 0x08, 0xFF, 0x00, 0x5D};
 
-const unsigned char *PATTERN = (U8 *)
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c"
-    "\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c\xDB\x6c";
+//const DEF_TX_POWER POWER_STEP_0 = RF_TX_POWER(20, 127);
+//const DEF_TX_POWER POWER_STEP_1 = RF_TX_POWER(50);
+//const DEF_TX_POWER POWER_STEP_2 = RF_TX_POWER(20);
+//const DEF_TX_POWER POWER_STEP_3 = RF_TX_POWER(8);
+//const DEF_TX_POWER POWER_STEP_4 = RF_TX_POWER(0x0);
+
+typedef struct {
+    uint8_t _split[4];
+    uint8_t stationNum;
+    uint8_t txPwr;
+    uint8_t txPwrInv;
+    uint8_t patternA[13];
+    uint8_t patternB[16];
+} PACKET;
+
+static PACKET packet = {
+    ._split     = "\xD3\x91\xD3\x91",
+    .stationNum = 0x10,
+    .txPwr      = 0x11,
+    .txPwrInv   = 0xEE,
+    .patternA   = "\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA",
+    .patternB   ="\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C",
+};
+
+inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
+    packet.txPwrInv = ~(packet.txPwr = pwrDb);
+    power_command[5] = si4463_pwr_lvl;
+    radio_comm_SendCmd(RF_TX_POWER_LEN, power_command);
+    vRadio_StartTx(0, (uint8_t *) &packet);
+}
 
 int main(void) {
     initHW();
     vRadio_Init();
     while (1) {
-        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_0);//todo remove when IWDG works
-        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        sendSinglePacket(20,127);
         delay(50);
-        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_1);
-        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        sendSinglePacket(10,22);
         delay(50);
-        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_2);
-        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        sendSinglePacket(0,7);
         delay(50);
-        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_3);
-        vRadio_StartTx(0, (unsigned char *) PATTERN);
+        sendSinglePacket(-10,3);
         delay(50);
-        radio_comm_SendCmd(RF_TX_POWER_LEN, POWER_STEP_4);
-        vRadio_StartTx(0, (unsigned char *) PATTERN);
-        delay(1800);//todo adjust
+        sendSinglePacket(-20,1);
+        delay(1800);
     }
     return 0;
 }

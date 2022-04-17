@@ -7,10 +7,10 @@
           <Value>0</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCenterFrequency">
-          <Value>433.88500</Value>
+          <Value>433.885</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudChannelSpacing">
-          <Value>25.00</Value>
+          <Value>25</Value>
         </DataItem>
       </grbFequencyControl>
       <grbCrystalControl Type="System.Windows.Forms.GroupBox">
@@ -62,7 +62,7 @@
           <Value>3</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudDeviation">
-          <Value>3.5</Value>
+          <Value>2.8</Value>
         </DataItem>
       </grbRfParameters>
     </tbpRfParameters>
@@ -100,10 +100,10 @@
             </grbCrcPolynomial>
             <grbCrcSeed Type="System.Windows.Forms.GroupBox">
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbCrcSeed1">
-                <Checked>True</Checked>
+                <Checked>False</Checked>
               </DataItem>
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbCrcSeed0">
-                <Checked>False</Checked>
+                <Checked>True</Checked>
               </DataItem>
             </grbCrcSeed>
           </tbpGeneralCrcConfig>
@@ -121,10 +121,10 @@
           <tbpGeneralFieldConfig Type="System.Windows.Forms.TabPage">
             <grbCrcEndian Type="System.Windows.Forms.GroupBox">
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbHighBytesFirst">
-                <Checked>True</Checked>
+                <Checked>False</Checked>
               </DataItem>
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbLowBytesFirst">
-                <Checked>False</Checked>
+                <Checked>True</Checked>
               </DataItem>
             </grbCrcEndian>
             <grbManchesterPattern Type="System.Windows.Forms.GroupBox">
@@ -145,17 +145,17 @@
             <grbPreamble Type="System.Windows.Forms.GroupBox">
               <grbPreambleType Type="System.Windows.Forms.GroupBox">
                 <DataItem Type="System.Windows.Forms.ComboBox" Name="cbbPreamblePattern">
-                  <SelectedIndex>0</SelectedIndex>
+                  <SelectedIndex>1</SelectedIndex>
                 </DataItem>
                 <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbPreambleType0101">
-                  <Checked>False</Checked>
+                  <Checked>True</Checked>
                 </DataItem>
                 <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbPreambleType1010">
-                  <Checked>True</Checked>
+                  <Checked>False</Checked>
                 </DataItem>
               </grbPreambleType>
               <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudPreambleTxLength">
-                <Value>40</Value>
+                <Value>4</Value>
               </DataItem>
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbPreambleManchesterEncoded">
                 <Checked>False</Checked>
@@ -311,7 +311,7 @@
           <tbpField1 Type="System.Windows.Forms.TabPage">
             <grbField1 Type="System.Windows.Forms.GroupBox">
               <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudField1Length">
-                <Value>16</Value>
+                <Value>39</Value>
               </DataItem>
               <haiField1Content Type="NewWDS.Applications.App_Common.PacketConfigControl.HexAsciiInputControl">
                 <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbASCII">
@@ -322,15 +322,15 @@
                 </DataItem>
                 <pnlInput Type="System.Windows.Forms.Panel">
                   <DataItem Type="System.Windows.Forms.MaskedTextBox" Name="mtbInput">
-                    <Text>DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C</Text>
+                    <Text>DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C DB 6C C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5 C5</Text>
                   </DataItem>
                 </pnlInput>
               </haiField1Content>
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbField1EnableCRC">
-                <Checked>False</Checked>
+                <Checked>True</Checked>
               </DataItem>
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbField1TransmitCRC">
-                <Checked>False</Checked>
+                <Checked>True</Checked>
               </DataItem>
               <DataItem Type="System.Windows.Forms.CheckBox" Name="chbField1DataWhitening">
                 <Checked>False</Checked>
