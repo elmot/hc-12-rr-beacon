@@ -5,7 +5,7 @@
 #define SDN_Pin GPIO_PIN_4
 
 bool radio_hal_NirqLevel(void) {
-    return GPIO_ReadInputPin(GPIOC, GPIO_PIN_4) != 0;
+    return GPIO_ReadInputPin(GPIOC, GPIO_PIN_4) != RESET;
 }
 
 void radio_hal_ClearNsel(void) {
@@ -16,7 +16,7 @@ void radio_hal_SetNsel(void) {
 
     while (SPI_GetFlagStatus(SPI_FLAG_BSY) == SET) {}
     GPIO_WriteHigh(GPIOD, GPIO_PIN_2);
-    delay(8);
+    delay(5);
 }
 
 static inline uint8_t SpiSendReceive(uint8_t data) {
@@ -24,7 +24,7 @@ static inline uint8_t SpiSendReceive(uint8_t data) {
     SPI->DR = data;
 
     while (SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET) {}
-    SPI_ReceiveData();
+    return SPI->DR;
 }
 
 void radio_hal_SpiWriteData(uint8_t byteCount, const uint8_t *pData) {
