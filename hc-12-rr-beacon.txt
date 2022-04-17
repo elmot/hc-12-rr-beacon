@@ -1,6 +1,6 @@
-Configuration	hc-12-test.ioc
+Configuration	hc-12-rr-beacon
 STM8CubeMX 	1.5.0
-Date	10/13/2021
+Date	04/17/2022
 MCU	STM8S003F3Px
 
 

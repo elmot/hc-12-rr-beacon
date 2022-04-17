@@ -9,13 +9,13 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(CMAKE_C_COMPILER iccstm8.exe)
 set(CMAKE_CXX_COMPILER iccstm8.exe)
 
-project(hc-12-test C ASM)
-add_executable(hc-12-test)
+project(hc-12-rr-beacon C ASM)
+add_executable(hc-12-rr-beacon)
 
-target_sources(hc-12-test PUBLIC src/main.c src/elmot-si-4463.c src/radio_hal.c src/stm8s_it.c )
-target_sources(hc-12-test PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config.h src/radio_hal.h)
+target_sources(hc-12-rr-beacon PUBLIC src/main.c src/elmot-si-4463.c src/radio_hal.c src/stm8s_it.c )
+target_sources(hc-12-rr-beacon PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config.h src/radio_hal.h)
 
-target_sources(hc-12-test PUBLIC
+target_sources(hc-12-rr-beacon PUBLIC
         STM8S_StdPeriph_Driver/src/stm8s_spi.c
         STM8S_StdPeriph_Driver/src/stm8s_gpio.c
         STM8S_StdPeriph_Driver/src/stm8s_clk.c
@@ -24,15 +24,15 @@ target_sources(hc-12-test PUBLIC
         STM8S_StdPeriph_Driver/src/stm8s_tim2.c
         )
 
-target_compile_definitions(hc-12-test PUBLIC STM8S003 USE_STDPERIPH_DRIVER SILABS_RADIO_SI446X)
-target_include_directories(hc-12-test PUBLIC STM8S_StdPeriph_Driver/inc src)
+target_compile_definitions(hc-12-rr-beacon PUBLIC STM8S003 USE_STDPERIPH_DRIVER SILABS_RADIO_SI446X)
+target_include_directories(hc-12-rr-beacon PUBLIC STM8S_StdPeriph_Driver/inc src)
 
-target_compile_options(hc-12-test PUBLIC -e -Ol --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)
-target_compile_options(hc-12-test PUBLIC --debug --code_model small --data_model medium --dlib_config ${IAR_EW_PATH}/stm8/LIB/dlstm8smn.h --vregs 16)
-target_link_options(hc-12-test PUBLIC "SHELL:--config_def _HEAP_SIZE=0x100 --config_def _CSTACK_SIZE=0x100")
-target_link_options(hc-12-test PUBLIC "SHELL:--redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb")
-target_link_options(hc-12-test PUBLIC --map ${CMAKE_BINARY_DIR}/beacon.map --config ${IAR_EW_PATH}/stm8/config/lnkstm8s003f3.icf)
-target_link_options(hc-12-test PUBLIC --entry __iar_program_start --debug_lib --no_out_extension)
+target_compile_options(hc-12-rr-beacon PUBLIC -e -Ol --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)
+target_compile_options(hc-12-rr-beacon PUBLIC --debug --code_model small --data_model medium --dlib_config ${IAR_EW_PATH}/stm8/LIB/dlstm8smn.h --vregs 16)
+target_link_options(hc-12-rr-beacon PUBLIC "SHELL:--config_def _HEAP_SIZE=0x100 --config_def _CSTACK_SIZE=0x100")
+target_link_options(hc-12-rr-beacon PUBLIC "SHELL:--redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb")
+target_link_options(hc-12-rr-beacon PUBLIC --map ${CMAKE_BINARY_DIR}/beacon.map --config ${IAR_EW_PATH}/stm8/config/lnkstm8s003f3.icf)
+target_link_options(hc-12-rr-beacon PUBLIC --entry __iar_program_start --debug_lib --no_out_extension)
 
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 

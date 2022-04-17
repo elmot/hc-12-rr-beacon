@@ -258,8 +258,8 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>D:\projects\hc-12-test\STM8S_StdPeriph_Driver\inc</state>
-                    <state>D:\projects\hc-12-test\src</state>
+                    <state>D:\projects\hc-12-rr-beacon\STM8S_StdPeriph_Driver\inc</state>
+                    <state>D:\projects\hc-12-rr-beacon\src</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -609,7 +609,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\lnkstm8s003k3.icf</state>
+                    <state>$TOOLKIT_DIR$\config\lnkstm8s003f3.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1749,6 +1749,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_rst.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_spi.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\STM8S_StdPeriph_Driver\src\stm8s_tim2.c</name>
             </file>
         </group>
     </group>

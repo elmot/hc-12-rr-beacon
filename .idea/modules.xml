@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hc-12-test.iml" filepath="$PROJECT_DIR$/.idea/hc-12-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hc-12-rr-beacon.iml" filepath="$PROJECT_DIR$/.idea/hc-12-rr-beacon.iml" />
     </modules>
   </component>
 </project>
