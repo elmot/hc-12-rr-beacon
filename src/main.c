@@ -2,6 +2,10 @@
 
 #define U8 uint8_t
 
+void delay(uint16_t msec);
+
+void radio_comm_SendCmd(uint8_t byteCount, uint8_t const *pData);
+
 void vRadio_Init(void);
 
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
@@ -22,9 +26,9 @@ void initHW() {
     GPIO_DeInit(GPIOC);
     GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_OUT_PP_HIGH_FAST); //SPI Soft CS
     GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
-    GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT); //nIRQ
+    GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT); //nIRQ
 
-    GPIO_Init(GPIOC, (GPIO_Pin_TypeDef)(GPIO_PIN_6 | GPIO_PIN_5), GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
+    GPIO_Init(GPIOC, (GPIO_Pin_TypeDef) (GPIO_PIN_6 | GPIO_PIN_5), GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
 
     SPI_DeInit();
     SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_2, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
@@ -37,10 +41,6 @@ void initHW() {
     TIM2_TimeBaseInit(TIM2_PRESCALER_16384, 1500);
     TIM2_ITConfig(TIM2_IT_UPDATE, ENABLE);
 }
-
-void delay(uint16_t msec);
-
-void radio_comm_SendCmd(uint8_t byteCount, uint8_t const *pData);
 
 #define RF_TX_POWER_LEN 8
 #define RF_TX_POWER(x) 0x11, 0x22, 0x04, 0x00, 0x08, x, 0x00, 0x5D
