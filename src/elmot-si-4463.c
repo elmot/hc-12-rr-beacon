@@ -301,11 +301,10 @@ void vRadio_PowerUp(void)
 
     /* Put radio in shutdown, wait then release */
     radio_hal_AssertShutdown();
-    delay(150);//todo optimize
+    delay(2);
     radio_hal_DeassertShutdown();
     ctsWentHigh = 0;
-    /* Wait until reset timeout or Reset IT signal */
-    delay(150);//todo optimize
+    delay(5);
 }
 
 void vRadio_Init(){
@@ -358,6 +357,6 @@ bool gRadio_CheckTransmitted(void)
     return false;
 }
 
-
-
-
+void sleepRadio() {
+    radio_comm_SendCmd(2,(uint8_t*)"\x34\x1");
+}

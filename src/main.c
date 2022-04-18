@@ -3,12 +3,33 @@
 
 #define U8 uint8_t
 
-//todo IWDG setup
-//todo keep radio off while halting
-//todo verify power save
+//todo optimize power consumption
+//todo bulk flashing scripts
+
+static __no_init uint8_t
+resetCounter;
+
+static inline void shutDownRadio() {
+    GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
+}
+
+void static initIWDG() {
+    IWDG->KR = 0xCC;//start
+    IWDG->KR = 0x55;//enable access
+    IWDG->PR = 6;
+    IWDG->RLR = 0xff;
+    IWDG->KR = 0xAA;
+    resetCounter = (resetCounter + 1) % 8;
+    if ((RST->SR & RST_SR_IWDGF) && (resetCounter != 0)) {
+        halt();
+    }
+}
 
 static inline void initHW() {
-
+    CLK_SlowActiveHaltWakeUpCmd(ENABLE);
+//    shutDownRadio();
+    initIWDG();
+    /* Switch off all unnecessary peripherals in sake of power consumption */
     CLK->PCKENR1 = 2/*SPI*/ | 0x20 /*TIM2*/;
     CLK->PCKENR2 = 0;
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV8);
@@ -20,11 +41,13 @@ static inline void initHW() {
 
     GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT); //nIRQ
     GPIO_Init(GPIOC, (GPIO_Pin_TypeDef) (GPIO_PIN_6 | GPIO_PIN_5), GPIO_MODE_OUT_PP_LOW_FAST); //SPI MOSI, CLS
-    GPIO_Init(GPIOC, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1| GPIO_PIN_2| GPIO_PIN_3| GPIO_PIN_7), GPIO_MODE_IN_PU_NO_IT); //Power save
+    GPIO_Init(GPIOC, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_7),
+              GPIO_MODE_IN_PU_NO_IT); //Power save
 
     GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_2 | GPIO_PIN_5), GPIO_MODE_OUT_PP_HIGH_FAST); //SPI Soft CS, LED
-    GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
-    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1| GPIO_PIN_3| GPIO_PIN_6| GPIO_PIN_7), GPIO_MODE_IN_PU_NO_IT); //Power save
+    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_7),
+              GPIO_MODE_IN_PU_NO_IT); //Power save
+    GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_SLOW); //Power save
 
     SPI_DeInit();
     SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_2, SPI_MODE_MASTER, SPI_CLOCKPOLARITY_LOW,
@@ -42,7 +65,7 @@ static inline void initHW() {
 
 #define RF_TX_POWER_LEN 8
 
-static uint8_t power_command[RF_TX_POWER_LEN]  = {0x11, 0x22, 0x04, 0x00, 0x08, 0xFF, 0x00, 0x5D};
+static uint8_t power_command[RF_TX_POWER_LEN] = {0x11, 0x22, 0x04, 0x00, 0x08, 0xFF, 0x00, 0x5D};
 
 typedef struct {
     uint8_t _split[4];
@@ -66,6 +89,14 @@ static PACKET packet = {
     .patternB   ="\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C\xDB\x6C",
 };
 
+static void inline ledOn() {
+    GPIO_WriteLow(GPIOD, GPIO_PIN_5);
+}
+
+static void inline ledOff() {
+    GPIO_WriteHigh(GPIOD, GPIO_PIN_5);
+}
+
 inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
     packet.txPwrInv = ~(packet.txPwr = pwrDb);
     power_command[5] = si4463_pwr_lvl;
@@ -76,21 +107,22 @@ inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
 int main(void) {
     initHW();
     vRadio_Init();
-    while (1) {
-        sendSinglePacket(20,127);
-        delay(50);
-        sendSinglePacket(10,22);
-        delay(50);
-        sendSinglePacket(0,7);
-        delay(50);
-        sendSinglePacket(-10,3);
-        GPIO_WriteLow(GPIOD, GPIO_PIN_5);
-        delay(50);
-        sendSinglePacket(-20,1);
-        GPIO_WriteHigh(GPIOD, GPIO_PIN_5);
-        delay(1800);
-    }
+    sendSinglePacket(20, 127);
+    delay(50);
+    sendSinglePacket(10, 22);
+    delay(50);
+    sendSinglePacket(0, 7);
+    delay(50);
+    sendSinglePacket(-10, 3);
+    delay(50);
+    ledOn();
+    sendSinglePacket(-20, 1);
+    delay(60);
+    sleepRadio();
+    ledOff();
+    halt();
 }
+
 
 #ifdef USE_FULL_ASSERT
 
@@ -104,8 +136,8 @@ int main(void) {
 void assert_failed(uint8_t *file, uint32_t line) {
     /* User can add his own implementation to report the file name and line number,
        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    (void)line;
-    (void)file;
+    (void) line;
+    (void) file;
     /* Infinite loop */
     while (1) {
     }

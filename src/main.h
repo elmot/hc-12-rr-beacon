@@ -12,4 +12,6 @@ void vRadio_Init(void);
 
 void vRadio_StartTx(uint8_t channel, const uint8_t *pioFixRadioPacket);
 
+void sleepRadio(void);
+
 #endif //HC_12_RR_BEACON_MAIN_H
