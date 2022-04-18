@@ -31,6 +31,11 @@ target_compile_definitions(hc-12-rr-beacon PUBLIC STM8S003 USE_STDPERIPH_DRIVER 
 ####
 target_compile_definitions(hc-12-rr-beacon PUBLIC Q30_003MHZ)
 
+####
+## STATION NUMBER
+####
+target_compile_definitions(hc-12-rr-beacon PUBLIC STATION_NUM=0x13)
+
 target_include_directories(hc-12-rr-beacon PUBLIC STM8S_StdPeriph_Driver/inc src)
 
 target_compile_options(hc-12-rr-beacon PUBLIC -e -Ol --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)

@@ -6,7 +6,6 @@
 //todo IWDG setup
 //todo keep radio off while halting
 //todo verify power save
-//todo station number
 
 static inline void initHW() {
 
@@ -56,7 +55,11 @@ typedef struct {
 
 static PACKET packet = {
     ._split     = "\xD3\x91\xD3\x91",
+#ifdef STATION_NUM
+    .stationNum = STATION_NUM,
+#else
     .stationNum = 0x10,
+#endif
     .txPwr      = 0x11,
     .txPwrInv   = 0xEE,
     .patternA   = "\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA\xAA",

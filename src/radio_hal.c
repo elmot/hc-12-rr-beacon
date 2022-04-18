@@ -5,7 +5,7 @@
 #define SDN_Pin GPIO_PIN_4
 
 bool radio_hal_NirqLevel(void) {
-    return GPIO_ReadInputPin(GPIOC, GPIO_PIN_4) != RESET;
+    return (bool)(GPIO_ReadInputPin(GPIOC, GPIO_PIN_4) != RESET);
 }
 
 void radio_hal_ClearNsel(void) {
