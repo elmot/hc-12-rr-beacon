@@ -4,7 +4,6 @@
 #define U8 uint8_t
 
 //todo optimize power consumption
-//todo bulk flashing scripts
 
 static __no_init uint8_t
 resetCounter;
