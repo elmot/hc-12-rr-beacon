@@ -16,11 +16,11 @@ target_sources(hc-12-rr-beacon PUBLIC src/main.c src/elmot-si-4463.c src/radio_h
 target_sources(hc-12-rr-beacon PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config_Q30.000MHz.h src/radio_hal.h)
 
 target_sources(hc-12-rr-beacon PUBLIC
-        STM8S_StdPeriph_Driver/src/stm8s_spi.c
-        STM8S_StdPeriph_Driver/src/stm8s_gpio.c
         STM8S_StdPeriph_Driver/src/stm8s_clk.c
+        STM8S_StdPeriph_Driver/src/stm8s_gpio.c
         STM8S_StdPeriph_Driver/src/stm8s_itc.c
         STM8S_StdPeriph_Driver/src/stm8s_rst.c
+        STM8S_StdPeriph_Driver/src/stm8s_spi.c
         STM8S_StdPeriph_Driver/src/stm8s_tim2.c
         )
 
@@ -38,7 +38,7 @@ target_compile_definitions(hc-12-rr-beacon PUBLIC STATION_NUM=0x13)
 
 target_include_directories(hc-12-rr-beacon PUBLIC STM8S_StdPeriph_Driver/inc src)
 
-target_compile_options(hc-12-rr-beacon PUBLIC -e -Ol --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)
+target_compile_options(hc-12-rr-beacon PUBLIC -e --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_cross_call)
 target_compile_options(hc-12-rr-beacon PUBLIC --debug --code_model small --data_model medium --dlib_config ${IAR_EW_PATH}/stm8/LIB/dlstm8smn.h --vregs 16)
 target_link_options(hc-12-rr-beacon PUBLIC "SHELL:--config_def _HEAP_SIZE=0x100 --config_def _CSTACK_SIZE=0x100")
 target_link_options(hc-12-rr-beacon PUBLIC "SHELL:--redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb")

@@ -3,36 +3,23 @@
 
 #define U8 uint8_t
 
-//todo optimize power consumption
-
-static __no_init uint8_t
-resetCounter;
-
-static inline void shutDownRadio() {
-    GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
-}
-
 void static initIWDG() {
     IWDG->KR = 0xCC;//start
     IWDG->KR = 0x55;//enable access
     IWDG->PR = 6;
     IWDG->RLR = 0xff;
     IWDG->KR = 0xAA;
-    resetCounter = (resetCounter + 1) % 8;
-    if ((RST->SR & RST_SR_IWDGF) && (resetCounter != 0)) {
-        halt();
-    }
 }
 
 static inline void initHW() {
     CLK_SlowActiveHaltWakeUpCmd(ENABLE);
-//    shutDownRadio();
+    GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
     initIWDG();
     /* Switch off all unnecessary peripherals in sake of power consumption */
     CLK->PCKENR1 = 2/*SPI*/ | 0x20 /*TIM2*/;
     CLK->PCKENR2 = 0;
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV8);
-    CLK_SYSCLKConfig(CLK_PRESCALER_HSIDIV1);
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
 
     GPIO_Init(GPIOA, GPIO_PIN_ALL, GPIO_MODE_IN_PU_NO_IT); //Power save
 
@@ -54,10 +41,9 @@ static inline void initHW() {
 
     SPI_Cmd(ENABLE);
 
-    /* Power save */
-
     TIM2_DeInit();
     TIM2_ARRPreloadConfig(DISABLE);
+//    MASTERCLK = 8Mhz, TIM@ after prescaler ~= 1KHz
     TIM2_TimeBaseInit(TIM2_PRESCALER_16384, 1500);
     TIM2_ITConfig(TIM2_IT_UPDATE, ENABLE);
 }
@@ -96,6 +82,14 @@ static void inline ledOff() {
     GPIO_WriteHigh(GPIOD, GPIO_PIN_5);
 }
 
+static void inline decreasePower() {
+    CLK->PCKENR1 = 0x20 /*TIM2*/;
+//    MASTERCLK = 8Mhz, TIM@ after prescaler ~= 1KHz
+    TIM2_TimeBaseInit(TIM2_PRESCALER_2048, 1500);
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV8);
+    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV128);
+}
+
 inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
     packet.txPwrInv = ~(packet.txPwr = pwrDb);
     power_command[5] = si4463_pwr_lvl;
@@ -104,22 +98,32 @@ inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
 }
 
 int main(void) {
-    initHW();
-    vRadio_Init();
-    sendSinglePacket(20, 127);
-    delay(50);
-    sendSinglePacket(10, 22);
-    delay(50);
-    sendSinglePacket(0, 7);
-    delay(50);
-    sendSinglePacket(-10, 3);
-    delay(50);
-    ledOn();
-    sendSinglePacket(-20, 1);
-    delay(60);
-    sleepRadio();
-    ledOff();
-    halt();
+
+    while (1) {
+        initHW();
+        vRadio_Init();
+        IWDG->KR = 0xAA;
+        sendSinglePacket(20, 127);
+        delay(50);
+        sendSinglePacket(10, 22);
+        delay(50);
+        sendSinglePacket(0, 7);
+        delay(50);
+        sendSinglePacket(-10, 3);
+        delay(50);
+        ledOn();
+        sendSinglePacket(-20, 1);
+        delay(60);
+        sleepRadio();
+        ledOff();
+        decreasePower();
+        delay(500);
+        delay(500);
+        delay(500);
+        delay(500);
+        delay(500);
+        delay(500);
+    }
 }
 
 
@@ -136,7 +140,6 @@ void assert_failed(uint8_t *file, uint32_t line) {
     /* User can add his own implementation to report the file name and line number,
        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
     (void) line;
-    (void) file;
     /* Infinite loop */
     while (1) {
     }

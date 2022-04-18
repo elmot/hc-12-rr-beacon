@@ -55,6 +55,7 @@ void delay(uint16_t msec) {
     TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
     enableInterrupts();
     TIM2_Cmd(ENABLE);
+    IWDG->KR = 0xAA;
     __wait_for_interrupt();
 }
 
