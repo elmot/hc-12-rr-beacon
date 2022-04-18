@@ -6,6 +6,7 @@
 //todo IWDG setup
 //todo keep radio off while halting
 //todo verify power save
+//todo station number
 
 static inline void initHW() {
 

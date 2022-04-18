@@ -2,7 +2,12 @@
 #include "stdint.h"
 #include "radio_hal.h"
 #include "si446x_cmd.h"
-#include "radio_config.h"
+
+#ifdef Q30_003MHZ
+#  include "radio_config_Q30.003MHz.h"
+#else
+#  include "radio_config_Q30.000MHz.h"
+#endif
 
 #define RADIO_CTS_TIMEOUT 255;
 enum

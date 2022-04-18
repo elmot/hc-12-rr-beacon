@@ -7,7 +7,7 @@
           <Value>0</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCenterFrequency">
-          <Value>433.885</Value>
+          <Value>433.92500</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudChannelSpacing">
           <Value>25</Value>
@@ -24,7 +24,7 @@
           <Value>20</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCrystalFrequency">
-          <Value>30</Value>
+          <Value>30.000</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCrystalCapBank">
           <Value>64</Value>
