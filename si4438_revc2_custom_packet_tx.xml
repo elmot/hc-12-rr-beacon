@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<RCA_ProjectData ProjectName="Custom packet TX" ChipType="Si4463" ChipRevision="B1" Version="3.2.11.0">
+<RCA_ProjectData ProjectName="Custom packet TX" ChipType="Si4438" ChipRevision="C2" Version="3.2.11.0">
   <DataItems>
     <tbpFrequencyAndPower Type="System.Windows.Forms.TabPage">
       <grbFequencyControl Type="System.Windows.Forms.GroupBox">
@@ -7,7 +7,7 @@
           <Value>0</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCenterFrequency">
-          <Value>433.92500</Value>
+          <Value>433.925</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudChannelSpacing">
           <Value>25</Value>
@@ -24,7 +24,7 @@
           <Value>20</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCrystalFrequency">
-          <Value>30.000</Value>
+          <Value>30</Value>
         </DataItem>
         <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudCrystalCapBank">
           <Value>64</Value>
@@ -90,6 +90,9 @@
             </DataItem>
           </tbpGeneralPacketConfig>
           <tbpGeneralCrcConfig Type="System.Windows.Forms.TabPage">
+            <DataItem Type="System.Windows.Forms.MaskedTextBox" Name="mtbCrcSeed">
+              <Text>00 00 00 00</Text>
+            </DataItem>
             <DataItem Type="System.Windows.Forms.CheckBox" Name="chbResetCRCAtBeginingOfThePacket">
               <Checked>True</Checked>
             </DataItem>
@@ -98,14 +101,6 @@
                 <SelectedIndex>4</SelectedIndex>
               </DataItem>
             </grbCrcPolynomial>
-            <grbCrcSeed Type="System.Windows.Forms.GroupBox">
-              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbCrcSeed1">
-                <Checked>False</Checked>
-              </DataItem>
-              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbCrcSeed0">
-                <Checked>True</Checked>
-              </DataItem>
-            </grbCrcSeed>
           </tbpGeneralCrcConfig>
           <tbpGeneralDataWhiteningConfiguration Type="System.Windows.Forms.TabPage">
             <DataItem Type="System.Windows.Forms.ComboBox" Name="cbbDataWhiteningPolynomial">
@@ -117,8 +112,24 @@
             <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudOutputBitNumber">
               <Value>0</Value>
             </DataItem>
+            <grbPnDirection Type="System.Windows.Forms.GroupBox">
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbPnDirectionForward">
+                <Checked>False</Checked>
+              </DataItem>
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbPnDirectionReversed">
+                <Checked>True</Checked>
+              </DataItem>
+            </grbPnDirection>
           </tbpGeneralDataWhiteningConfiguration>
           <tbpGeneralFieldConfig Type="System.Windows.Forms.TabPage">
+            <grbDataBitOrder Type="System.Windows.Forms.GroupBox">
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbDataLsbFirst">
+                <Checked>False</Checked>
+              </DataItem>
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbDataMsbFirst">
+                <Checked>True</Checked>
+              </DataItem>
+            </grbDataBitOrder>
             <grbCrcEndian Type="System.Windows.Forms.GroupBox">
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbHighBytesFirst">
                 <Checked>False</Checked>
@@ -127,6 +138,14 @@
                 <Checked>True</Checked>
               </DataItem>
             </grbCrcEndian>
+            <grbBitOrder Type="System.Windows.Forms.GroupBox">
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbLsbFirst">
+                <Checked>False</Checked>
+              </DataItem>
+              <DataItem Type="System.Windows.Forms.RadioButton" Name="rdbMsbFirst">
+                <Checked>True</Checked>
+              </DataItem>
+            </grbBitOrder>
             <grbManchesterPattern Type="System.Windows.Forms.GroupBox">
               <DataItem Type="System.Windows.Forms.RadioButton" Name="rdb0eqs01">
                 <Checked>False</Checked>
@@ -164,10 +183,16 @@
           </tbpPreamble>
           <tbpSyncWord Type="System.Windows.Forms.TabPage">
             <grbSyncWord Type="System.Windows.Forms.GroupBox">
+              <DataItem Type="System.Windows.Forms.CheckBox" Name="chbSyncWordErrorAtBeginningOnly">
+                <Checked>False</Checked>
+              </DataItem>
               <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudSyncWordLength">
                 <Value>1</Value>
               </DataItem>
               <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudSyncWordAllowedBitError">
+                <Value>0</Value>
+              </DataItem>
+              <DataItem Type="System.Windows.Forms.NumericUpDown" Name="nudSyncWordLengthSubtract">
                 <Value>0</Value>
               </DataItem>
               <swcSyncWord Type="NewWDS.Applications.App_Common.PacketConfigControl.SyncWordInputControl">

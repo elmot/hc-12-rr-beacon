@@ -14,7 +14,7 @@ void static initIWDG() {
 static inline void initHW() {
     CLK_SlowActiveHaltWakeUpCmd(ENABLE);
     GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
-    initIWDG();
+//    initIWDG();
     /* Switch off all unnecessary peripherals in sake of power consumption */
     CLK->PCKENR1 = 2/*SPI*/ | 0x20 /*TIM2*/;
     CLK->PCKENR2 = 0;
@@ -30,8 +30,8 @@ static inline void initHW() {
     GPIO_Init(GPIOC, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_7),
               GPIO_MODE_IN_PU_NO_IT); //Power save
 
-    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_2 | GPIO_PIN_5), GPIO_MODE_OUT_PP_HIGH_FAST); //SPI Soft CS, LED
-    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_7),
+    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_3 | GPIO_PIN_5), GPIO_MODE_OUT_PP_HIGH_FAST); //SPI Soft CS, LED
+    GPIO_Init(GPIOD, (GPIO_Pin_TypeDef) (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_7),
               GPIO_MODE_IN_PU_NO_IT); //Power save
     GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_SLOW); //Power save
 
@@ -50,7 +50,7 @@ static inline void initHW() {
 
 #define RF_TX_POWER_LEN 8
 
-static uint8_t power_command[RF_TX_POWER_LEN] = {0x11, 0x22, 0x04, 0x00, 0x08, 0xFF, 0x00, 0x5D};
+static uint8_t power_command[RF_TX_POWER_LEN] = {0x11, 0x22, 0x04, 0x00, 0x08, 0xFF, 0x00, 0x1D};
 
 typedef struct {
     uint8_t _split[4];

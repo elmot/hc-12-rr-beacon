@@ -3,7 +3,7 @@
  * configurations.
  *
  * @n WDS GUI Version: 3.2.11.0
- * @n Device: Si4463 Rev.: B1                                 
+ * @n Device: Si4438 Rev.: C2
  *
  * @b COPYRIGHT
  * @n Silicon Laboratories Confidential
@@ -22,6 +22,7 @@
 // Crys_freq(Hz): 30000000    Crys_tol(ppm): 20    IF_mode: 2    High_perf_Ch_Fil: 1    OSRtune: 0    Ch_Fil_Bw_AFC: 0    ANT_DIV: 0    PM_pattern: 0
 // MOD_type: 3    Rsymb(sps): 3000    Fdev(Hz): 2800    RXBW(Hz): 150000    Manchester: 0    AFC_en: 0    Rsymb_error: 0.0    Chip-Version: 2
 // RF Freq.(MHz): 433.925    API_TC: 29    fhst: 25000    inputBW: 0    BERT: 0    RAW_dout: 0    D_source: 0    Hi_pfm_div: 1
+// API_ARR_Det_en: 0    Fdev_error: 0    API_ETSI: 0
 //
 // # RX IF frequency is  -468750 Hz
 // # WB filter 1 (BW =  38.15 kHz);  NB-filter 1 (BW = 38.15 kHz)
@@ -39,6 +40,8 @@
 #define RADIO_CONFIGURATION_DATA_CUSTOM_PAYLOAD					   {0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xDB, 0x6C, 0xC5, 0xC5, 0xC5, 0xC5, \
 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5, 0xC5}
 
+#include "..\drivers\radio\Si446x\si446x_patch.h"
+
 
 // CONFIGURATION COMMANDS
 
@@ -46,7 +49,7 @@
 // Command:                  RF_POWER_UP
 // Description:              Command to power-up the device and select the operational mode and functionality.
 */
-#define RF_POWER_UP 0x02, 0x01, 0x00, 0x01, 0xC9, 0xC3, 0x80
+#define RF_POWER_UP 0x02, 0x81, 0x00, 0x01, 0xC9, 0xC3, 0x80
 
 /*
 // Command:                  RF_GPIO_PIN_CFG
@@ -75,7 +78,7 @@
 // Descriptions:
 //   GLOBAL_CONFIG - Global configuration settings.
 */
-#define RF_GLOBAL_CONFIG_1 0x11, 0x00, 0x01, 0x03, 0x60
+#define RF_GLOBAL_CONFIG_1 0x11, 0x00, 0x01, 0x03, 0x20
 
 /*
 // Set properties:           RF_INT_CTL_ENABLE_1
@@ -122,26 +125,27 @@
 #define RF_PREAMBLE_TX_LENGTH_9 0x11, 0x10, 0x09, 0x00, 0x04, 0x14, 0x00, 0x0F, 0x12, 0x00, 0x00, 0x00, 0x00
 
 /*
-// Set properties:           RF_SYNC_CONFIG_5
-// Number of properties:     5
+// Set properties:           RF_SYNC_CONFIG_6
+// Number of properties:     6
 // Group ID:                 0x11
 // Start ID:                 0x00
-// Default values:           0x01, 0x2D, 0xD4, 0x2D, 0xD4,
+// Default values:           0x01, 0x2D, 0xD4, 0x2D, 0xD4, 0x00,
 // Descriptions:
 //   SYNC_CONFIG - Sync Word configuration bits.
 //   SYNC_BITS_31_24 - Sync word.
 //   SYNC_BITS_23_16 - Sync word.
 //   SYNC_BITS_15_8 - Sync word.
 //   SYNC_BITS_7_0 - Sync word.
+//   SYNC_CONFIG2 - Sync Word configuration bits.
 */
-#define RF_SYNC_CONFIG_5 0x11, 0x11, 0x05, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+#define RF_SYNC_CONFIG_6 0x11, 0x11, 0x06, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 
 /*
-// Set properties:           RF_PKT_CRC_CONFIG_7
-// Number of properties:     7
+// Set properties:           RF_PKT_CRC_CONFIG_12
+// Number of properties:     12
 // Group ID:                 0x12
 // Start ID:                 0x00
-// Default values:           0x00, 0x01, 0x08, 0xFF, 0xFF, 0x00, 0x00,
+// Default values:           0x00, 0x01, 0x08, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30,
 // Descriptions:
 //   PKT_CRC_CONFIG - Select a CRC polynomial and seed.
 //   PKT_WHT_POLY_15_8 - 16-bit polynomial value for the PN Generator (e.g., for Data Whitening)
@@ -150,20 +154,21 @@
 //   PKT_WHT_SEED_7_0 - 16-bit seed value for the PN Generator (e.g., for Data Whitening)
 //   PKT_WHT_BIT_NUM - Selects which bit of the LFSR (used to generate the PN / data whitening sequence) is used as the output bit for data scrambling.
 //   PKT_CONFIG1 - General configuration bits for transmission or reception of a packet.
-*/
-#define RF_PKT_CRC_CONFIG_7 0x11, 0x12, 0x07, 0x00, 0x04, 0x00, 0x30, 0xFF, 0xFF, 0x00, 0x00
-
-/*
-// Set properties:           RF_PKT_LEN_12
-// Number of properties:     12
-// Group ID:                 0x12
-// Start ID:                 0x08
-// Default values:           0x00, 0x00, 0x00, 0x30, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-// Descriptions:
+//   PKT_CONFIG2 - General packet configuration bits.
 //   PKT_LEN - Configuration bits for reception of a variable length packet.
 //   PKT_LEN_FIELD_SOURCE - Field number containing the received packet length byte(s).
 //   PKT_LEN_ADJUST - Provides for adjustment/offset of the received packet length value (in order to accommodate a variety of methods of defining total packet length).
 //   PKT_TX_THRESHOLD - TX FIFO almost empty threshold.
+*/
+#define RF_PKT_CRC_CONFIG_12 0x11, 0x12, 0x0C, 0x00, 0x04, 0x00, 0x30, 0xFF, 0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30
+
+/*
+// Set properties:           RF_PKT_RX_THRESHOLD_12
+// Number of properties:     12
+// Group ID:                 0x12
+// Start ID:                 0x0C
+// Default values:           0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+// Descriptions:
 //   PKT_RX_THRESHOLD - RX FIFO Almost Full threshold.
 //   PKT_FIELD_1_LENGTH_12_8 - Unsigned 13-bit Field 1 length value.
 //   PKT_FIELD_1_LENGTH_7_0 - Unsigned 13-bit Field 1 length value.
@@ -172,20 +177,20 @@
 //   PKT_FIELD_2_LENGTH_12_8 - Unsigned 13-bit Field 2 length value.
 //   PKT_FIELD_2_LENGTH_7_0 - Unsigned 13-bit Field 2 length value.
 //   PKT_FIELD_2_CONFIG - General data processing and packet configuration bits for Field 2.
-*/
-#define RF_PKT_LEN_12 0x11, 0x12, 0x0C, 0x08, 0x00, 0x00, 0x00, 0x30, 0x30, 0x00, 0x27, 0x04, 0xA2, 0x00, 0x00, 0x00
-
-/*
-// Set properties:           RF_PKT_FIELD_2_CRC_CONFIG_12
-// Number of properties:     12
-// Group ID:                 0x12
-// Start ID:                 0x14
-// Default values:           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-// Descriptions:
 //   PKT_FIELD_2_CRC_CONFIG - Configuration of CRC control bits across Field 2.
 //   PKT_FIELD_3_LENGTH_12_8 - Unsigned 13-bit Field 3 length value.
 //   PKT_FIELD_3_LENGTH_7_0 - Unsigned 13-bit Field 3 length value.
 //   PKT_FIELD_3_CONFIG - General data processing and packet configuration bits for Field 3.
+*/
+#define RF_PKT_RX_THRESHOLD_12 0x11, 0x12, 0x0C, 0x0C, 0x30, 0x00, 0x27, 0x04, 0xA2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+/*
+// Set properties:           RF_PKT_FIELD_3_CRC_CONFIG_12
+// Number of properties:     12
+// Group ID:                 0x12
+// Start ID:                 0x18
+// Default values:           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+// Descriptions:
 //   PKT_FIELD_3_CRC_CONFIG - Configuration of CRC control bits across Field 3.
 //   PKT_FIELD_4_LENGTH_12_8 - Unsigned 13-bit Field 4 length value.
 //   PKT_FIELD_4_LENGTH_7_0 - Unsigned 13-bit Field 4 length value.
@@ -194,20 +199,20 @@
 //   PKT_FIELD_5_LENGTH_12_8 - Unsigned 13-bit Field 5 length value.
 //   PKT_FIELD_5_LENGTH_7_0 - Unsigned 13-bit Field 5 length value.
 //   PKT_FIELD_5_CONFIG - General data processing and packet configuration bits for Field 5.
-*/
-#define RF_PKT_FIELD_2_CRC_CONFIG_12 0x11, 0x12, 0x0C, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-/*
-// Set properties:           RF_PKT_FIELD_5_CRC_CONFIG_12
-// Number of properties:     12
-// Group ID:                 0x12
-// Start ID:                 0x20
-// Default values:           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-// Descriptions:
 //   PKT_FIELD_5_CRC_CONFIG - Configuration of CRC control bits across Field 5.
 //   PKT_RX_FIELD_1_LENGTH_12_8 - Unsigned 13-bit RX Field 1 length value.
 //   PKT_RX_FIELD_1_LENGTH_7_0 - Unsigned 13-bit RX Field 1 length value.
 //   PKT_RX_FIELD_1_CONFIG - General data processing and packet configuration bits for RX Field 1.
+*/
+#define RF_PKT_FIELD_3_CRC_CONFIG_12 0x11, 0x12, 0x0C, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+/*
+// Set properties:           RF_PKT_RX_FIELD_1_CRC_CONFIG_12
+// Number of properties:     12
+// Group ID:                 0x12
+// Start ID:                 0x24
+// Default values:           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+// Descriptions:
 //   PKT_RX_FIELD_1_CRC_CONFIG - Configuration of CRC control bits across RX Field 1.
 //   PKT_RX_FIELD_2_LENGTH_12_8 - Unsigned 13-bit RX Field 2 length value.
 //   PKT_RX_FIELD_2_LENGTH_7_0 - Unsigned 13-bit RX Field 2 length value.
@@ -216,27 +221,27 @@
 //   PKT_RX_FIELD_3_LENGTH_12_8 - Unsigned 13-bit RX Field 3 length value.
 //   PKT_RX_FIELD_3_LENGTH_7_0 - Unsigned 13-bit RX Field 3 length value.
 //   PKT_RX_FIELD_3_CONFIG - General data processing and packet configuration bits for RX Field 3.
-*/
-#define RF_PKT_FIELD_5_CRC_CONFIG_12 0x11, 0x12, 0x0C, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-/*
-// Set properties:           RF_PKT_RX_FIELD_3_CRC_CONFIG_9
-// Number of properties:     9
-// Group ID:                 0x12
-// Start ID:                 0x2C
-// Default values:           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-// Descriptions:
 //   PKT_RX_FIELD_3_CRC_CONFIG - Configuration of CRC control bits across RX Field 3.
 //   PKT_RX_FIELD_4_LENGTH_12_8 - Unsigned 13-bit RX Field 4 length value.
 //   PKT_RX_FIELD_4_LENGTH_7_0 - Unsigned 13-bit RX Field 4 length value.
 //   PKT_RX_FIELD_4_CONFIG - General data processing and packet configuration bits for RX Field 4.
+*/
+#define RF_PKT_RX_FIELD_1_CRC_CONFIG_12 0x11, 0x12, 0x0C, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+/*
+// Set properties:           RF_PKT_RX_FIELD_4_CRC_CONFIG_5
+// Number of properties:     5
+// Group ID:                 0x12
+// Start ID:                 0x30
+// Default values:           0x00, 0x00, 0x00, 0x00, 0x00,
+// Descriptions:
 //   PKT_RX_FIELD_4_CRC_CONFIG - Configuration of CRC control bits across RX Field 4.
 //   PKT_RX_FIELD_5_LENGTH_12_8 - Unsigned 13-bit RX Field 5 length value.
 //   PKT_RX_FIELD_5_LENGTH_7_0 - Unsigned 13-bit RX Field 5 length value.
 //   PKT_RX_FIELD_5_CONFIG - General data processing and packet configuration bits for RX Field 5.
 //   PKT_RX_FIELD_5_CRC_CONFIG - Configuration of CRC control bits across RX Field 5.
 */
-#define RF_PKT_RX_FIELD_3_CRC_CONFIG_9 0x11, 0x12, 0x09, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define RF_PKT_RX_FIELD_4_CRC_CONFIG_5 0x11, 0x12, 0x05, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00
 
 /*
 // Set properties:           RF_MODEM_MOD_TYPE_12
@@ -272,11 +277,11 @@
 #define RF_MODEM_FREQ_DEV_0_1 0x11, 0x20, 0x01, 0x0C, 0xC4
 
 /*
-// Set properties:           RF_MODEM_TX_RAMP_DELAY_8
-// Number of properties:     8
+// Set properties:           RF_MODEM_TX_RAMP_DELAY_12
+// Number of properties:     12
 // Group ID:                 0x20
 // Start ID:                 0x18
-// Default values:           0x01, 0x00, 0x08, 0x03, 0xC0, 0x00, 0x10, 0x20,
+// Default values:           0x01, 0x00, 0x08, 0x03, 0xC0, 0x00, 0x10, 0x20, 0x00, 0x00, 0x00, 0x4B,
 // Descriptions:
 //   MODEM_TX_RAMP_DELAY - TX ramp-down delay setting.
 //   MODEM_MDM_CTRL - MDM control.
@@ -286,18 +291,20 @@
 //   MODEM_IF_FREQ_0 - the IF frequency setting (an 18-bit signed number).
 //   MODEM_DECIMATION_CFG1 - Specifies three decimator ratios for the Cascaded Integrator Comb (CIC) filter.
 //   MODEM_DECIMATION_CFG0 - Specifies miscellaneous parameters and decimator ratios for the Cascaded Integrator Comb (CIC) filter.
-*/
-#define RF_MODEM_TX_RAMP_DELAY_8 0x11, 0x20, 0x08, 0x18, 0x01, 0x00, 0x08, 0x03, 0x80, 0x00, 0x30, 0x10
-
-/*
-// Set properties:           RF_MODEM_BCR_OSR_1_9
-// Number of properties:     9
-// Group ID:                 0x20
-// Start ID:                 0x22
-// Default values:           0x00, 0x4B, 0x06, 0xD3, 0xA0, 0x06, 0xD3, 0x02, 0xC0,
-// Descriptions:
+//   MODEM_DECIMATION_CFG2 - Specifies miscellaneous decimator filter selections.
+//   MODEM_IFPKD_THRESHOLDS -
 //   MODEM_BCR_OSR_1 - RX BCR/Slicer oversampling rate (12-bit unsigned number).
 //   MODEM_BCR_OSR_0 - RX BCR/Slicer oversampling rate (12-bit unsigned number).
+*/
+#define RF_MODEM_TX_RAMP_DELAY_12 0x11, 0x20, 0x0C, 0x18, 0x01, 0x00, 0x08, 0x03, 0x80, 0x00, 0x30, 0x10, 0x0C, 0xE8, 0x01, 0xA1
+
+/*
+// Set properties:           RF_MODEM_BCR_NCO_OFFSET_2_12
+// Number of properties:     12
+// Group ID:                 0x20
+// Start ID:                 0x24
+// Default values:           0x06, 0xD3, 0xA0, 0x06, 0xD3, 0x02, 0xC0, 0x00, 0x00, 0x23, 0x83, 0x69,
+// Descriptions:
 //   MODEM_BCR_NCO_OFFSET_2 - RX BCR NCO offset value (an unsigned 22-bit number).
 //   MODEM_BCR_NCO_OFFSET_1 - RX BCR NCO offset value (an unsigned 22-bit number).
 //   MODEM_BCR_NCO_OFFSET_0 - RX BCR NCO offset value (an unsigned 22-bit number).
@@ -305,25 +312,26 @@
 //   MODEM_BCR_GAIN_0 - The unsigned 11-bit RX BCR loop gain value.
 //   MODEM_BCR_GEAR - RX BCR loop gear control.
 //   MODEM_BCR_MISC1 - Miscellaneous control bits for the RX BCR loop.
-*/
-#define RF_MODEM_BCR_OSR_1_9 0x11, 0x20, 0x09, 0x22, 0x01, 0xA1, 0x01, 0x3A, 0x93, 0x00, 0xA8, 0x02, 0x00
-
-/*
-// Set properties:           RF_MODEM_AFC_GEAR_7
-// Number of properties:     7
-// Group ID:                 0x20
-// Start ID:                 0x2C
-// Default values:           0x00, 0x23, 0x83, 0x69, 0x00, 0x40, 0xA0,
-// Descriptions:
+//   MODEM_BCR_MISC0 - Miscellaneous RX BCR loop controls.
 //   MODEM_AFC_GEAR - RX AFC loop gear control.
 //   MODEM_AFC_WAIT - RX AFC loop wait time control.
 //   MODEM_AFC_GAIN_1 - Sets the gain of the PLL-based AFC acquisition loop, and provides miscellaneous control bits for AFC functionality.
 //   MODEM_AFC_GAIN_0 - Sets the gain of the PLL-based AFC acquisition loop, and provides miscellaneous control bits for AFC functionality.
+*/
+#define RF_MODEM_BCR_NCO_OFFSET_2_12 0x11, 0x20, 0x0C, 0x24, 0x01, 0x3A, 0x93, 0x00, 0xA8, 0x02, 0x00, 0x00, 0x00, 0x12, 0x80, 0x1A
+
+/*
+// Set properties:           RF_MODEM_AFC_LIMITER_1_3
+// Number of properties:     3
+// Group ID:                 0x20
+// Start ID:                 0x30
+// Default values:           0x00, 0x40, 0xA0,
+// Descriptions:
 //   MODEM_AFC_LIMITER_1 - Set the AFC limiter value.
 //   MODEM_AFC_LIMITER_0 - Set the AFC limiter value.
 //   MODEM_AFC_MISC - Specifies miscellaneous AFC control bits.
 */
-#define RF_MODEM_AFC_GEAR_7 0x11, 0x20, 0x07, 0x2C, 0x00, 0x12, 0x80, 0x1A, 0x0B, 0x7D, 0xA0
+#define RF_MODEM_AFC_LIMITER_1_3 0x11, 0x20, 0x03, 0x30, 0x0B, 0x7D, 0xA0
 
 /*
 // Set properties:           RF_MODEM_AGC_CONTROL_1
@@ -334,66 +342,122 @@
 // Descriptions:
 //   MODEM_AGC_CONTROL - Miscellaneous control bits for the Automatic Gain Control (AGC) function in the RX Chain.
 */
-#define RF_MODEM_AGC_CONTROL_1 0x11, 0x20, 0x01, 0x35, 0xE2
+#define RF_MODEM_AGC_CONTROL_1 0x11, 0x20, 0x01, 0x35, 0xE0
 
 /*
-// Set properties:           RF_MODEM_AGC_WINDOW_SIZE_9
-// Number of properties:     9
+// Set properties:           RF_MODEM_AGC_WINDOW_SIZE_3
+// Number of properties:     3
 // Group ID:                 0x20
 // Start ID:                 0x38
-// Default values:           0x11, 0x10, 0x10, 0x0B, 0x1C, 0x40, 0x00, 0x00, 0x2B,
+// Default values:           0x11, 0x10, 0x10,
 // Descriptions:
 //   MODEM_AGC_WINDOW_SIZE - Specifies the size of the measurement and settling windows for the AGC algorithm.
 //   MODEM_AGC_RFPD_DECAY - Sets the decay time of the RF peak detectors.
 //   MODEM_AGC_IFPD_DECAY - Sets the decay time of the IF peak detectors.
-//   MODEM_FSK4_GAIN1 - Specifies the gain factor of the secondary branch in 4(G)FSK ISI-suppression.
-//   MODEM_FSK4_GAIN0 - Specifies the gain factor of the primary branch in 4(G)FSK ISI-suppression.
-//   MODEM_FSK4_TH1 - 16 bit 4(G)FSK slicer threshold.
-//   MODEM_FSK4_TH0 - 16 bit 4(G)FSK slicer threshold.
-//   MODEM_FSK4_MAP - 4(G)FSK symbol mapping code.
-//   MODEM_OOK_PDTC - Configures the attack and decay times of the OOK Peak Detector.
 */
-#define RF_MODEM_AGC_WINDOW_SIZE_9 0x11, 0x20, 0x09, 0x38, 0x11, 0x5B, 0x5B, 0x00, 0x1A, 0x77, 0x77, 0x00, 0x2A
+#define RF_MODEM_AGC_WINDOW_SIZE_3 0x11, 0x20, 0x03, 0x38, 0x11, 0x5B, 0x5B
 
 /*
-// Set properties:           RF_MODEM_OOK_CNT1_8
-// Number of properties:     8
+// Set properties:           RF_MODEM_OOK_PDTC_4
+// Number of properties:     4
 // Group ID:                 0x20
-// Start ID:                 0x42
-// Default values:           0xA4, 0x03, 0x56, 0x02, 0x00, 0xA3, 0x02, 0x80,
+// Start ID:                 0x40
+// Default values:           0x2B, 0x0C, 0xA4, 0x03,
 // Descriptions:
+//   MODEM_OOK_PDTC - Configures the attack and decay times of the OOK Peak Detector.
+//   MODEM_OOK_BLOPK - Configures the slicing reference level of the OOK Peak Detector.
 //   MODEM_OOK_CNT1 - OOK control.
 //   MODEM_OOK_MISC - Selects the detector(s) used for demodulation of an OOK signal, or for demodulation of a (G)FSK signal when using the asynchronous demodulator.
-//   MODEM_RAW_SEARCH - Defines and controls the search period length for the Moving Average and Min-Max detectors.
+*/
+#define RF_MODEM_OOK_PDTC_4 0x11, 0x20, 0x04, 0x40, 0x2A, 0x0C, 0xA4, 0x23
+
+/*
+// Set properties:           RF_MODEM_RAW_CONTROL_5
+// Number of properties:     5
+// Group ID:                 0x20
+// Start ID:                 0x45
+// Default values:           0x02, 0x00, 0xA3, 0x02, 0x80,
+// Descriptions:
 //   MODEM_RAW_CONTROL - Defines gain and enable controls for raw / nonstandard mode.
 //   MODEM_RAW_EYE_1 - 11 bit eye-open detector threshold.
 //   MODEM_RAW_EYE_0 - 11 bit eye-open detector threshold.
 //   MODEM_ANT_DIV_MODE - Antenna diversity mode settings.
 //   MODEM_ANT_DIV_CONTROL - Specifies controls for the Antenna Diversity algorithm.
 */
-#define RF_MODEM_OOK_CNT1_8 0x11, 0x20, 0x08, 0x42, 0xA4, 0x03, 0xD6, 0x03, 0x00, 0x56, 0x01, 0x80
+#define RF_MODEM_RAW_CONTROL_5 0x11, 0x20, 0x05, 0x45, 0x03, 0x00, 0x5D, 0x01, 0x00
 
 /*
-// Set properties:           RF_MODEM_RSSI_COMP_1
+// Set properties:           RF_MODEM_RSSI_JUMP_THRESH_1
 // Number of properties:     1
 // Group ID:                 0x20
-// Start ID:                 0x4E
-// Default values:           0x32,
+// Start ID:                 0x4B
+// Default values:           0x0C,
 // Descriptions:
+//   MODEM_RSSI_JUMP_THRESH - Configures the RSSI Jump Detection threshold.
+*/
+#define RF_MODEM_RSSI_JUMP_THRESH_1 0x11, 0x20, 0x01, 0x4B, 0x06
+
+/*
+// Set properties:           RF_MODEM_RSSI_CONTROL2_2
+// Number of properties:     2
+// Group ID:                 0x20
+// Start ID:                 0x4D
+// Default values:           0x00, 0x40,
+// Descriptions:
+//   MODEM_RSSI_CONTROL2 - RSSI Jump Detection control.
 //   MODEM_RSSI_COMP - RSSI compensation value.
 */
-#define RF_MODEM_RSSI_COMP_1 0x11, 0x20, 0x01, 0x4E, 0x40
+#define RF_MODEM_RSSI_CONTROL2_2 0x11, 0x20, 0x02, 0x4D, 0x18, 0x40
 
 /*
-// Set properties:           RF_MODEM_CLKGEN_BAND_1
-// Number of properties:     1
+// Set properties:           RF_MODEM_RAW_SEARCH2_2
+// Number of properties:     2
 // Group ID:                 0x20
-// Start ID:                 0x51
-// Default values:           0x08,
+// Start ID:                 0x50
+// Default values:           0x00, 0x08,
 // Descriptions:
+//   MODEM_RAW_SEARCH2 - Defines and controls the search period length for the Moving Average and Min-Max detectors.
 //   MODEM_CLKGEN_BAND - Select PLL Synthesizer output divider ratio as a function of frequency band.
 */
-#define RF_MODEM_CLKGEN_BAND_1 0x11, 0x20, 0x01, 0x51, 0x0A
+#define RF_MODEM_RAW_SEARCH2_2 0x11, 0x20, 0x02, 0x50, 0x84, 0x0A
+
+/*
+// Set properties:           RF_MODEM_SPIKE_DET_2
+// Number of properties:     2
+// Group ID:                 0x20
+// Start ID:                 0x54
+// Default values:           0x00, 0x00,
+// Descriptions:
+//   MODEM_SPIKE_DET - Configures the threshold for (G)FSK Spike Detection.
+//   MODEM_ONE_SHOT_AFC - Configures parameters for th e One Shot AFC function and for BCR timing/acquisition.
+*/
+#define RF_MODEM_SPIKE_DET_2 0x11, 0x20, 0x02, 0x54, 0x03, 0x07
+
+/*
+// Set properties:           RF_MODEM_RSSI_MUTE_1
+// Number of properties:     1
+// Group ID:                 0x20
+// Start ID:                 0x57
+// Default values:           0x00,
+// Descriptions:
+//   MODEM_RSSI_MUTE - Configures muting of the RSSI to avoid false RSSI interrupts.
+*/
+#define RF_MODEM_RSSI_MUTE_1 0x11, 0x20, 0x01, 0x57, 0x00
+
+/*
+// Set properties:           RF_MODEM_DSA_CTRL1_5
+// Number of properties:     5
+// Group ID:                 0x20
+// Start ID:                 0x5B
+// Default values:           0x00, 0x00, 0x00, 0x00, 0x00,
+// Descriptions:
+//   MODEM_DSA_CTRL1 - Configures parameters for the Signal Arrival Detection circuit block and algorithm.
+//   MODEM_DSA_CTRL2 - Configures parameters for the Signal Arrival Detection circuit block and algorithm.
+//   MODEM_DSA_QUAL - Configures parameters for the Eye Opening qualification m ethod of the Signal Arrival Detection algorithm.
+//   MODEM_DSA_RSSI - Signal Arrival Detect RSSI Qualifier Config
+//   MODEM_DSA_MISC - Miscellaneous detection of signal arrival bits.
+*/
+#define RF_MODEM_DSA_CTRL1_5 0x11, 0x20, 0x05, 0x5B, 0x40, 0x04, 0x06, 0x78, 0x20
 
 /*
 // Set properties:           RF_MODEM_CHFLT_RX1_CHFLT_COE13_7_0_12
@@ -473,7 +537,7 @@
 //   PA_BIAS_CLKDUTY - Configuration of the PA Bias and duty cycle of the TX clock source.
 //   PA_TC - Configuration of PA ramping parameters.
 */
-#define RF_PA_MODE_4 0x11, 0x22, 0x04, 0x00, 0x08, 0x7F, 0x00, 0x3D
+#define RF_PA_MODE_4 0x11, 0x22, 0x04, 0x00, 0x08, 0x7F, 0x00, 0x1D
 
 /*
 // Set properties:           RF_SYNTH_PFDCP_CPFF_7
@@ -539,6 +603,7 @@
 
 #ifndef FIRMWARE_LOAD_COMPILE
 #define RADIO_CONFIGURATION_DATA_ARRAY { \
+        SI446X_PATCH_CMDS, \
         0x07, RF_POWER_UP, \
         0x08, RF_GPIO_PIN_CFG, \
         0x06, RF_GLOBAL_XO_TUNE_2, \
@@ -546,22 +611,27 @@
         0x05, RF_INT_CTL_ENABLE_1, \
         0x08, RF_FRR_CTL_A_MODE_4, \
         0x0D, RF_PREAMBLE_TX_LENGTH_9, \
-        0x09, RF_SYNC_CONFIG_5, \
-        0x0B, RF_PKT_CRC_CONFIG_7, \
-        0x10, RF_PKT_LEN_12, \
-        0x10, RF_PKT_FIELD_2_CRC_CONFIG_12, \
-        0x10, RF_PKT_FIELD_5_CRC_CONFIG_12, \
-        0x0D, RF_PKT_RX_FIELD_3_CRC_CONFIG_9, \
+        0x0A, RF_SYNC_CONFIG_6, \
+        0x10, RF_PKT_CRC_CONFIG_12, \
+        0x10, RF_PKT_RX_THRESHOLD_12, \
+        0x10, RF_PKT_FIELD_3_CRC_CONFIG_12, \
+        0x10, RF_PKT_RX_FIELD_1_CRC_CONFIG_12, \
+        0x09, RF_PKT_RX_FIELD_4_CRC_CONFIG_5, \
         0x10, RF_MODEM_MOD_TYPE_12, \
         0x05, RF_MODEM_FREQ_DEV_0_1, \
-        0x0C, RF_MODEM_TX_RAMP_DELAY_8, \
-        0x0D, RF_MODEM_BCR_OSR_1_9, \
-        0x0B, RF_MODEM_AFC_GEAR_7, \
+        0x10, RF_MODEM_TX_RAMP_DELAY_12, \
+        0x10, RF_MODEM_BCR_NCO_OFFSET_2_12, \
+        0x07, RF_MODEM_AFC_LIMITER_1_3, \
         0x05, RF_MODEM_AGC_CONTROL_1, \
-        0x0D, RF_MODEM_AGC_WINDOW_SIZE_9, \
-        0x0C, RF_MODEM_OOK_CNT1_8, \
-        0x05, RF_MODEM_RSSI_COMP_1, \
-        0x05, RF_MODEM_CLKGEN_BAND_1, \
+        0x07, RF_MODEM_AGC_WINDOW_SIZE_3, \
+        0x08, RF_MODEM_OOK_PDTC_4, \
+        0x09, RF_MODEM_RAW_CONTROL_5, \
+        0x05, RF_MODEM_RSSI_JUMP_THRESH_1, \
+        0x06, RF_MODEM_RSSI_CONTROL2_2, \
+        0x06, RF_MODEM_RAW_SEARCH2_2, \
+        0x06, RF_MODEM_SPIKE_DET_2, \
+        0x05, RF_MODEM_RSSI_MUTE_1, \
+        0x09, RF_MODEM_DSA_CTRL1_5, \
         0x10, RF_MODEM_CHFLT_RX1_CHFLT_COE13_7_0_12, \
         0x10, RF_MODEM_CHFLT_RX1_CHFLT_COE1_7_0_12, \
         0x10, RF_MODEM_CHFLT_RX2_CHFLT_COE7_7_0_12, \
