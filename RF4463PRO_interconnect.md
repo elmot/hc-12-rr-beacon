@@ -6,7 +6,7 @@
 | PC5     | SCLK       | CN2-6        | SPI SCK            | 
 | PC6     | SDI        | CN2-7        | SPI MOSI           |
 | PC7     | SDO        | CN2-8        | SPI MISO           |
-| PD2     | nSEL       | CN4-3        | SPI nCE            |
+| PD3     | nSEL       | CN4-3        | SPI nCE            |
 | PD4     | SDN        | CN4-5        | Shutdown           |
 | PD5     | ----       |              | UART TX            |
 | PD6     | ----       |              | UART RX            |

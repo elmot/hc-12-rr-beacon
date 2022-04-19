@@ -13,7 +13,7 @@ project(hc-12-rr-beacon C ASM)
 add_executable(hc-12-rr-beacon)
 
 target_sources(hc-12-rr-beacon PUBLIC src/main.c src/elmot-si-4463.c src/radio_hal.c src/stm8s_it.c )
-target_sources(hc-12-rr-beacon PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config_Q30.000MHz.h src/radio_hal.h)
+target_sources(hc-12-rr-beacon PUBLIC src/stm8s_it.h src/stm8s_conf.h src/radio_config.h src/radio_hal.h)
 
 target_sources(hc-12-rr-beacon PUBLIC
         STM8S_StdPeriph_Driver/src/stm8s_clk.c
@@ -25,11 +25,6 @@ target_sources(hc-12-rr-beacon PUBLIC
         )
 
 target_compile_definitions(hc-12-rr-beacon PUBLIC STM8S003 USE_STDPERIPH_DRIVER SILABS_RADIO_SI446X)
-
-####
-## QUARTZ  FINE TUNING
-####
-target_compile_definitions(hc-12-rr-beacon PUBLIC Q30_003MHZ)
 
 ####
 ## STATION NUMBER

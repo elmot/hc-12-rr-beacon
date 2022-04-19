@@ -9,13 +9,13 @@ bool radio_hal_NirqLevel(void) {
 }
 
 void radio_hal_ClearNsel(void) {
-    GPIO_WriteLow(GPIOD, GPIO_PIN_2);
+    GPIO_WriteLow(GPIOD, GPIO_PIN_3);
 }
 
 void radio_hal_SetNsel(void) {
 
     while (SPI_GetFlagStatus(SPI_FLAG_BSY) == SET) {}
-    GPIO_WriteHigh(GPIOD, GPIO_PIN_2);
+    GPIO_WriteHigh(GPIOD, GPIO_PIN_3);
     delay(5);
 }
 
