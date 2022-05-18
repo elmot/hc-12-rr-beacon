@@ -1,4 +1,4 @@
-| MCU Pin | Si4463 Pin | Function           |
+| MCU Pin | Si4438 Pin | Function           |
 |---------|------------|--------------------|
 | PB4     | GPIO0      | ????               |
 | PC3     | GPIO1      | ????               |

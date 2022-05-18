@@ -1,7 +1,7 @@
 # This project is a continuation of [RandomRace radio beacon](http://www.randomrace.ru/2015/gsbc/preparation/transmitter/eng/) project
 
-3rd version is based on hc-12 UART radio extender board with custom firmware and no hardware changes.
-
+![Picture for attention attraction](docs/pfaa.jpg)
+Version 3.2 is based on HC-12 UART radio extender board with custom firmware and no hardware changes.
 ### Tooling used:
 
 * STM8VL-DISCOVERY board as a flashing probe
@@ -15,6 +15,7 @@
 * [hc-12 interconnection table](hc-12-inteconnect.md)
 * Tools and libraries [documentation](docs)
 * STM8 peripheral config [(pdf)](hc-12-rr-beacon.pdf) [(txt)](hc-12-rr-beacon.txt)
+* Ready-to-flash [.hex](bulk_flash/) files. You can use any of STM8 Discovery board as a probe, and STVP as a flashing utility.
 
 ### Transmission protocol
 #### Sequence

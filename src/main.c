@@ -90,9 +90,9 @@ static void inline decreasePower() {
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV128);
 }
 
-inline static void sendSinglePacket(int8_t pwrDb, uint8_t si4463_pwr_lvl) {
+inline static void sendSinglePacket(int8_t pwrDb, uint8_t si44xx_pwr_lvl) {
     packet.txPwrInv = ~(packet.txPwr = pwrDb);
-    power_command[5] = si4463_pwr_lvl;
+    power_command[5] = si44xx_pwr_lvl;
     radio_comm_SendCmd(RF_TX_POWER_LEN, power_command);
     vRadio_StartTx(0, (uint8_t *) &packet);
 }
