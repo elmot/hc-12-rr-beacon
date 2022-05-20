@@ -14,7 +14,7 @@ void static initIWDG() {
 static inline void initHW() {
     CLK_SlowActiveHaltWakeUpCmd(ENABLE);
     GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST); //RADIO_SDN
-//    initIWDG();
+    initIWDG();
     /* Switch off all unnecessary peripherals in sake of power consumption */
     CLK->PCKENR1 = 2/*SPI*/ | 0x20 /*TIM2*/;
     CLK->PCKENR2 = 0;
